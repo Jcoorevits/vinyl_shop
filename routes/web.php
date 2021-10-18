@@ -1,5 +1,8 @@
 <?php
 
+use App\Genre;
+use App\Record;
+use App\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +25,17 @@ Route::view('contact-us', 'contact'); // Get is functie, view is static?
 Route::prefix('admin')->group(function () {
     route::redirect('/', '/admin/records');
     Route::get('records', 'Admin\RecordController@index');
+});
+
+//ter illustartie
+Route::prefix('api')->group(function () {
+    Route::get('users', function (){
+        return User::get();
+    });
+    Route::get('records', function (){
+        return Record::with('genre')->get();
+    });
+    Route::get('genres', function (){
+        return Genre::with('records')->get();
+    });
 });
