@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 //});
 route::view('/', 'home');
 
+Route::get('shop', 'ShopController@index');
+Route::get('shop/{id}', 'ShopController@show');
+
 Route::view('contact-us', 'contact'); // Get is functie, view is static?
 Route::prefix('admin')->group(function () {
     route::redirect('/', '/admin/records');
