@@ -164,6 +164,8 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
 
+        App\Providers\HelperServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -230,6 +232,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
+        'Json' => Facades\App\Helpers\Json::class,
+
+        'Mask' => Facades\App\Helpers\Mask::class,
 
     ],
 
