@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-route::view('/', 'home');
+route::view('/', 'home'); // Get is functie, view is static
 
 Route::get('shop', 'ShopController@index');
 Route::get('shop/{id}', 'ShopController@show');
+Route::get('itunes', 'ItunesController@index');
+Route::get('contact-us', 'ContactUsController@show');
+Route::post('contact-us', 'ContactUsController@sendEmail'); // post voor form!
 
-Route::view('contact-us', 'contact'); // Get is functie, view is static?
 Route::prefix('admin')->group(function () {
     route::redirect('/', '/admin/records');
     Route::get('records', 'Admin\RecordController@index');
@@ -32,13 +34,13 @@ Route::prefix('admin')->group(function () {
 
 //ter illustartie
 Route::prefix('api')->group(function () {
-    Route::get('users', function (){
+    Route::get('users', function () {
         return User::get();
     });
-    Route::get('records', function (){
+    Route::get('records', function () {
         return Record::with('genre')->get();
     });
-    Route::get('genres', function (){
+    Route::get('genres', function () {
         return Genre::with('records')->get();
     });
 });

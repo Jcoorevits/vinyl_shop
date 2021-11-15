@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Genre;
 use App\Record;
+use Http;
 use Illuminate\Http\Request;
 use Json;
 
@@ -31,8 +32,7 @@ class ShopController extends Controller
             ->where([['artist', 'like', $artist],
                 ['genre_id', 'like', $genre_id]
             ])
-            ->paginate(8)
-            ->appends(['artist' => $request->input('artist'), 'genre_id' => $request->input('genre_id')]);
+            ->paginate(8);
 
         foreach ($records as $record) {
 
@@ -56,6 +56,45 @@ class ShopController extends Controller
     // Detail Page: http://vinyl_shop.test/shop/{id} or http://localhost:3000/shop/{id}
     public function show($id)
     {
-        return view('shop.show', ['id' => $id]);
+
+        $record = Record::with('genre')->findOrFail($id);
+
+        $record->cover = $record->cover ?? "https://coverartarchive.org/release/$record->title_mbid/front-500.jpg";
+        // Combine artist + title
+        $record->title = $record->artist . ' - ' . $record->title;
+        // Links to MusicBrainz API
+        // https://wiki.musicbrainz.org/Development/JSON_Web_Service
+        $record->recordUrl = 'https://musicbrainz.org/ws/2/release/' . $record->title_mbid . '?inc=recordings+url-rels&fmt=json';
+        // If stock > 0: button is green, otherwise the button is red
+        $record->btnClass = $record->stock > 0 ? 'btn-outline-success' : 'btn-outline-danger disabled';
+        // You can't overwrite the attribute genre (object) with a string, so we make a new attribute
+        $record->genreName = $record->genre->name;
+        // Hide attributes you don't need for the view*
+
+        $record->price = number_format($record->price, 2);
+
+        $record->makeHidden(['genre', 'artist', 'genre_id', 'created_at', 'updated_at', 'title_mbid', 'genre']);
+
+        // get record info and convert it to json
+        $response = Http::get($record->recordUrl)->json();
+
+
+        $tracks = $response['media'][0]['tracks'];
+        /*foreach ($tracks as $track){
+            $track['length'] = date('i:s', $track['length'] / 1000);
+            unset($track['id'], $track['recording'], $track['number']);
+            return $track;
+        }
+        dump($tracks);*/
+        $tracks = collect($tracks)
+            ->transform(function ($item, $key) {
+                $item['length'] = date('i:s', $item['length'] / 1000);
+                unset($item['id'], $item['recording'], $item['number']);
+                return $item;
+            });
+
+        $result = compact('tracks', 'record');
+        Json::dump($result);
+        return view('shop.show', $result);  // Pass $result to the view
     }
 }

@@ -1,3 +1,14 @@
 main {
     min-height: 80vh;
 }
+
+.cardShopMaster {
+    cursor: pointer;
+    .btn{
+        display: none;
+    }
+}
+a.btn.disabled, fieldset:disabled a.btn{
+    pointer-events: all;
+    cursor: not-allowed;
+}
