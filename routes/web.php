@@ -27,11 +27,10 @@ Route::get('itunes', 'ItunesController@index');
 Route::get('contact-us', 'ContactUsController@show');
 Route::post('contact-us', 'ContactUsController@sendEmail'); // post voor form!
 
-Route::prefix('admin')->group(function () {
-    route::redirect('/', '/admin/records');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::redirect('/', '/admin/records');
     Route::get('records', 'Admin\RecordController@index');
 });
-
 //ter illustartie
 Route::prefix('api')->group(function () {
     Route::get('users', function () {
@@ -44,3 +43,7 @@ Route::prefix('api')->group(function () {
         return Genre::with('records')->get();
     });
 });
+
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
+
