@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactMail;
+use App\User;
 use Illuminate\Http\Request;
 use Mail;
 
@@ -26,9 +27,10 @@ class ContactUsController extends Controller
             'email' => 'required|email',
             'message' => 'required|min:10'
         ]);
-
+        $users = User::get();
         // Send email
-        $email = new ContactMail();
+        $email = new ContactMail($request, $users);
+        /*return $email; om snel de mail te kunnen zien */
         // return $email;       // uncomment this line to display the result in the browser
         Mail::to($request)      // or Mail::to($request->email, $request->name)
         ->send($email);

@@ -8,7 +8,7 @@
 
     @if (!session()->has('success'))
 
-        <form action="/contact-us" method="post" novalidate>
+        <form action="/contact-us" method="post">
             @csrf {{--cross-site request forgery bij elke form--}}
             <div class="form-group">
                 <label for="name">Name</label>
