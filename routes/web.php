@@ -29,6 +29,8 @@ Route::post('contact-us', 'ContactUsController@sendEmail'); // post voor form!
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::redirect('/', '/admin/records');
+    Route::resource('genres', 'Admin\GenreController');
+    Route::resource('genres2', 'Admin\Genre2Controller', ['parameters' => ['genres2' => 'genre']]);
     Route::get('records', 'Admin\RecordController@index');
 });
 //ter illustartie
