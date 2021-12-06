@@ -52,6 +52,7 @@
                                 <a class="dropdown-item" href="/admin/records"><i class="fas fa-compact-disc"></i>Records</a>
                                 <a class="dropdown-item" href="/admin/users"><i class="fas fa-users-cog"></i>Users</a>
                                 <a class="dropdown-item" href="/admin/orders"><i class="fas fa-box-open"></i>Orders</a>
+                                <a class="dropdown-item" href="/admin/genres2"><i class="fas fa-microphone-alt"></i>Genres (advanced)</a>
                             @endif
                         </div>
                     </li>

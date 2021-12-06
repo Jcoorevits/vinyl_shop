@@ -15,7 +15,7 @@ class Genre2Controller extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.genres2.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class Genre2Controller extends Controller
      */
     public function create()
     {
-        //
+        return redirect('admin/genres2');
     }
 
     /**
@@ -36,7 +36,21 @@ class Genre2Controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate $request
+        $this->validate($request,[
+            'name' => 'required|min:3|unique:genres,name'
+        ]);
+
+        // Create new genre
+        $genre = new Genre();
+        $genre->name = $request->name;
+        $genre->save();
+
+        // Return a success message to master page
+        return response()->json([
+            'type' => 'success',
+            'text' => "The genre <b>$genre->name</b> has been added"
+        ]);
     }
 
     /**
@@ -47,7 +61,7 @@ class Genre2Controller extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+        return redirect('admin/genres2');
     }
 
     /**
@@ -58,7 +72,7 @@ class Genre2Controller extends Controller
      */
     public function edit(Genre $genre)
     {
-        //
+        return redirect('admin/genres2');
     }
 
     /**
@@ -70,7 +84,20 @@ class Genre2Controller extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+        // Validate $request
+        $this->validate($request,[
+            'name' => 'required|min:3|unique:genres,name,' . $genre->id
+        ]);
+
+        // Update genre
+        $genre->name = $request->name;
+        $genre->save();
+
+        // Return a success message to master page
+        return response()->json([
+            'type' => 'success',
+            'text' => "The genre <b>$genre->name</b> has been updated"
+        ]);
     }
 
     /**
@@ -81,6 +108,18 @@ class Genre2Controller extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+        return response()->json([
+            'type' => 'success',
+            'text' => "The genre <b>$genre->name</b> has been deleted"
+        ]);
     }
+    public function qryGenres()
+    {
+        $genres = Genre::orderBy('name')
+            ->withCount('records')
+            ->get();
+        return $genres;
+    }
+
 }

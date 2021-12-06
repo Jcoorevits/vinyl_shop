@@ -12,3 +12,6 @@ a.btn.disabled, fieldset:disabled a.btn{
     pointer-events: all;
     cursor: not-allowed;
 }
+.btn[disabled] {
+    cursor: not-allowed;
+}
