@@ -25,7 +25,8 @@ Route::get('shop', 'ShopController@index');
 Route::get('shop/{id}', 'ShopController@show');
 Route::get('itunes', 'ItunesController@index');
 Route::get('contact-us', 'ContactUsController@show');
-Route::post('contact-us', 'ContactUsController@sendEmail'); // post voor form!
+Route::post('contact-us', 'ContactUsController@sendEmail'); // post for form!
+Route::resource('users', 'Admin\UserController');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::redirect('/', '/admin/records');
